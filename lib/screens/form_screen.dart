@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/components/task.dart';
+import 'package:primeiro_projeto/data/task_dao.dart';
 import 'package:primeiro_projeto/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
@@ -109,7 +111,7 @@ class _FormScreenState extends State<FormScreen> {
                       keyboardType: TextInputType.url,
                       controller: imageController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Imagem',
                           fillColor: Colors.white70,
@@ -135,14 +137,14 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                   ),
                   ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                           if(_formKey.currentState!.validate()) {
-                            TaskInherited.of(widget.taskContext).newTask(nameController.text, imageController.text, int.parse(difficultyController.text));
+                            await TaskDao().save(Task(nameController.text, imageController.text, int.parse(difficultyController.text)));
                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Criando uma nova Tarefa')));
                             Navigator.pop(context);
                         }
                       },
-                      child: Text('Adicionar!'))
+                      child: const Text('Adicionar!'))
                 ],
               ),
             ),

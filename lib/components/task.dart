@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:primeiro_projeto/components/difficulty.dart';
+import 'package:primeiro_projeto/data/task_dao.dart';
 
 class Task extends StatefulWidget {
   final String nome;
@@ -15,7 +16,6 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-
   bool assetOrNetwork() {
     if (widget.foto.contains('http')) {
       return false;
@@ -98,6 +98,32 @@ class _TaskState extends State<Task> {
                       height: 52,
                       width: 52,
                       child: ElevatedButton(
+                          onLongPress: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Row(
+                                    children: [
+                                      Text('Deletar'),
+                                      Icon(Icons.delete_forever)
+                                    ],
+                                  ),
+                                  content: const Text('Você tem certeza que deseja deletar essa Tarefa?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          TaskDao().delete(widget.nome);
+                                          Navigator.pop(context, 'Sim');
+                                        },
+                                        child: Text('Sim')
+                                    ),
+                                    TextButton(
+                                        onPressed: () => Navigator.pop(context, 'Não'),
+                                        child: const Text('Não')
+                                    ),
+                                  ],
+                                ),
+                              ),
+
                           onPressed: () {
                             setState(() {
                               widget.nivel++;
